@@ -1,8 +1,9 @@
 import React from 'react'
-import { isRouteErrorResponse, useRouteError, Link } from 'react-router-dom'
+import { isRouteErrorResponse, useRouteError, Link, useNavigate } from 'react-router-dom'
 
 export default function ErrorPage() {
   const err = useRouteError() as any
+  const navigate = useNavigate()
   const message = isRouteErrorResponse(err) ? `${err.status} ${err.statusText}` : (err?.message || 'Something went wrong')
   return (
     <div style={{display:'grid', placeItems:'center', minHeight:'100dvh', padding:24}}>
@@ -12,7 +13,7 @@ export default function ErrorPage() {
         {err?.stack && <details style={{marginTop:8}}><summary>Stack</summary><pre style={{whiteSpace:'pre-wrap'}}>{String(err.stack)}</pre></details>}
         <div style={{marginTop:12, display:'flex', gap:8}}>
           <Link className="btn btn-primary" to="/app">Return to app</Link>
-          <button className="btn" onClick={() => { localStorage.removeItem('pack-smart'); location.href='/app' }}>Reset local state</button>
+          <button className="btn" onClick={() => { localStorage.removeItem('pack-smart'); navigate('/app') }}>Reset local state</button>
         </div>
       </div>
     </div>

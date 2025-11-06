@@ -12,7 +12,7 @@ export default function Login() {
             SmartPack
           </div>
           <figure className="frame" style={{width:540, maxWidth:'80%'}}>
-            <img src="/assets/SmartPackLogin 1.svg" alt="SmartPack login hero" />
+            <img src={`${import.meta.env.BASE_URL}assets/SmartPackLogin 1.svg`} alt="SmartPack login hero" />
           </figure>
           <p style={{opacity:.95, textAlign:'center', maxWidth:520}}>Plan and visualize how everything fits before you zip up. Drag, snap, and optimize your packing in minutes.</p>
         </div>

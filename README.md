@@ -85,18 +85,48 @@ PackSmart turns packing from a stressful chore into a strategic, efficient proce
 
 ## Getting Started
 
-### Installation
+### Local Development
 
 ```bash
 npm install
 npm run dev
 ```
 
+The app will be available at `http://localhost:5173`
+
 ### Routes
 
 - `/` → Login page (click-through authentication)
 - `/app` → Main packing interface
 - `/styleguide` → Design tokens and icon reference
+
+### Building for Production
+
+```bash
+npm run build
+```
+
+The built files will be in the `dist/` directory.
+
+## Deployment
+
+### GitHub Pages
+
+PackSmart is configured for automatic deployment to GitHub Pages. When you push to the `main` or `master` branch, GitHub Actions will:
+
+1. Build the application
+2. Deploy it to the `gh-pages` branch
+3. Make it available at `https://[username].github.io/Pack-Smart/`
+
+**Setup Instructions:**
+
+1. Go to your repository Settings → Pages
+2. Under "Source", select "GitHub Actions"
+3. Push to `main` or `master` branch - the workflow will automatically deploy
+
+The deployment workflow is located at `.github/workflows/deploy.yml` and will run on every push to the main branch.
+
+**Note:** If your repository name is different from "Pack-Smart", update the `BASE_PATH` in `vite.config.ts` or set it as an environment variable in the GitHub Actions workflow.
 
 ### Usage
 

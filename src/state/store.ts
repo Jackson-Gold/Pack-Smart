@@ -1,12 +1,12 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-export type ItemType = 'laptop'|'shirt'|'book'|'hat'|'other'
+export type ItemType = 'laptop'|'shirt'|'book'|'hat'|'other'|string
 
 export type InventoryItem = {
   id: string
   name: string
-  type: ItemType
+  type: ItemType  // Can be old type enum or Material Design icon name
   color: string
   w: number
   h: number
@@ -68,6 +68,7 @@ type State = {
 
   addInventoryItem: (item: Omit<InventoryItem,'id'> & { id?: string }) => string
   updateInventoryItem: (id: string, patch: Partial<InventoryItem>) => void
+  removeInventoryItem: (id: string) => void
 
   optimize: (by: 'space'|'weight') => void
   packedCountByItem: (itemId: string) => number
@@ -154,6 +155,15 @@ export const usePackStore = create<State>()(persist((set, get) => ({
     return id
   },
   updateInventoryItem: (id, patch) => { get().record(); set(state => ({ inventory: { ...state.inventory, [id]: { ...state.inventory[id], ...patch } } })) },
+  removeInventoryItem: (id) => {
+    get().record()
+    set(state => {
+      const { [id]: removed, ...rest } = state.inventory
+      const packed = Object.fromEntries(Object.entries(state.packed).filter(([_,p]) => p.itemId !== id))
+      const order = state.order.filter(oid => packed[oid])
+      return { inventory: rest, packed, order }
+    })
+  },
 
   packedCountByItem: (itemId) => Object.values(get().packed).filter(p => p.itemId === itemId).length,
 

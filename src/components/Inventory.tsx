@@ -2,12 +2,18 @@ import React from 'react'
 import { usePackStore, InventoryItem } from '../state/store'
 
 function typeIcon(t: InventoryItem['type']) {
-  const map = { laptop:'laptop', shirt:'checkroom', book:'menu_book', hat:'travel', other:'inventory_2' } as const
-  return (map as any)[t] ?? 'inventory_2'
+  // Handle both old type system and new icon name system
+  const oldTypeMap = { laptop:'laptop', shirt:'checkroom', book:'menu_book', hat:'travel', other:'inventory_2' } as const
+  // If it's an old type, map it; otherwise assume it's already an icon name
+  if (t in oldTypeMap) {
+    return (oldTypeMap as any)[t] ?? 'inventory_2'
+  }
+  // Assume it's already a Material Design icon name
+  return t || 'inventory_2'
 }
 
 export default function Inventory({ onAddItem }: { onAddItem: () => void }) {
-  const { inventory, packedCountByItem } = usePackStore()
+  const { inventory, packedCountByItem, removeInventoryItem } = usePackStore()
 
   const handleDragStart = (e: React.PointerEvent, item: InventoryItem) => {
     ;(e.target as HTMLElement).setPointerCapture?.(e.pointerId)
@@ -37,7 +43,7 @@ export default function Inventory({ onAddItem }: { onAddItem: () => void }) {
 
   return (
     <div className="column-flex" style={{height:'100%'}}>
-      <div role="list" aria-label="Inventory list" className="inventory-scroll" style={{display:'grid', gap:8}}>
+      <div role="list" aria-label="Inventory list" className="inventory-scroll" style={{display:'flex', flexDirection:'column', gap:8}}>
         {Object.values(inventory).map(item => {
           const packedCount = packedCountByItem(item.id)
           const remaining = item.count - packedCount
@@ -50,7 +56,31 @@ export default function Inventory({ onAddItem }: { onAddItem: () => void }) {
               onPointerDown={(e) => !disabled && handleDragStart(e, item)}
               onPointerMove={handleDragMove}
               onPointerUp={(e) => !disabled && handleDragEnd(e, item)}
+              style={{position:'relative', minHeight:'72px', height:'72px', flexShrink:0}}
             >
+              <button
+                className="icon-btn"
+                onClick={(e) => { e.stopPropagation(); removeInventoryItem(item.id) }}
+                title="Remove item"
+                style={{
+                  position:'absolute',
+                  top:4,
+                  right:4,
+                  padding:'1px',
+                  minWidth:'auto',
+                  width:'18px',
+                  height:'18px',
+                  color:'#DC2626',
+                  background:'transparent',
+                  border:'none',
+                  zIndex:10,
+                  display:'flex',
+                  alignItems:'center',
+                  justifyContent:'center'
+                }}
+              >
+                <span className="material-symbols-rounded" style={{fontSize:12}}>close</span>
+              </button>
               <div className="icon-bubble"><span className="material-symbols-rounded" aria-hidden>{typeIcon(item.type)}</span></div>
               <div>
                 <div style={{fontWeight:600}}>{item.name}</div>

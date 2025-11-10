@@ -144,6 +144,10 @@ The deployment workflow is located at `.github/workflows/deploy.yml` and will ru
 - **Material Design Icons** for visual item representation
 - **Web Workers** for background optimization processing
 
+
+## Artificial Intelligence Accreditation 
+Developed collaboratively with OpenAI GPT-5, Claude Sonet 4.5, and Cursor Composer 1 to implement and refine the Pack Smart front-end experience, including layout generation, code synthesis, interface styling, and iterative debugging.
+
 ## Project Structure
 
 ```

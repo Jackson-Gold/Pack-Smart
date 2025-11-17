@@ -2,6 +2,9 @@
 
 **PackSmart** is an innovative packing optimization tool that transforms the tedious task of organizing luggage into an intuitive, visual experience. Unlike traditional packing methods that rely on guesswork and trial-and-error, PackSmart provides a smart grid-based interface that helps you visualize exactly how your items fit before you even start packing.
 
+**Live Hosting**
+PackSmart is currently hosted here: https://jackson-gold.github.io/Pack-Smart/
+
 ## Why PackSmart is Useful and Innovative
 
 Packing efficiently is a complex optimization problem that most people solve through trial and error. PackSmart addresses this by:

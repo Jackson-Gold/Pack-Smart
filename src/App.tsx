@@ -8,6 +8,12 @@ import AddItemModal from './components/AddItemModal'
 import AddConstraintModal from './components/AddConstraintModal'
 import { usePackStore } from './state/store'
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react';
+
+const BASE_CELL_PX = 24
+const MIN_SCALE_PERCENT = 75
+const MAX_SCALE_PERCENT = 300
+const DEFAULT_SCALE_PERCENT = 225
 
 export default function App() {
   const [showAdvanced, setShowAdvanced] = React.useState(false)
@@ -19,6 +25,17 @@ export default function App() {
   const [editingName, setEditingName] = React.useState('')
   const { optimize, packed, inventory, containers, containerOrder, addContainer, removeContainer, undo, redo, renameContainer } = usePackStore()
 
+  const [scalePercent, setScalePercent] = React.useState(DEFAULT_SCALE_PERCENT)
+
+  useEffect(() => {
+    const px = Math.round((scalePercent / 100) * BASE_CELL_PX)
+    document.documentElement.style.setProperty('--cell-px', String(px))
+  }, [scalePercent])
+
+  const handleScaleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setScalePercent(Number(e.currentTarget.value))
+  }
+
   const hasContainers = containerOrder.some(id => containers[id])
 
   return (
@@ -26,14 +43,14 @@ export default function App() {
       <header className="appbar" role="banner">
         <div className="brand" aria-label="SmartPack">
           <span className="logo"><span className="material-symbols-rounded" aria-hidden>backpack</span></span>
-          SmartPack
+          PackSmart
         </div>
         <div className="toolbar">
           <button className="icon-btn" onClick={() => optimize('space')} title="Optimize for space">
             <span className="material-symbols-rounded">auto_awesome</span> Optimize
           </button>
           <button className="icon-btn" onClick={() => optimize('weight')} title="Optimize for weight">
-            <span className="material-symbols-rounded">line_weight</span> What‑If?
+            <span className="material-symbols-rounded">line_weight</span> What-If?
           </button>
           <button className="icon-btn" onClick={() => window.alert('Share → export image / link (stub)')} title="Share layout">
             <span className="material-symbols-rounded">ios_share</span> Share
@@ -67,7 +84,7 @@ export default function App() {
                            onKeyDown={(e)=> { if (e.key==='Enter') { (e.target as HTMLInputElement).blur() } else if (e.key==='Escape') { setEditingId(null) } }}
                     />
                   ) : (
-                    <span className="section-title" onDoubleClick={()=> { setEditingId(firstCid); setEditingName(containers[firstCid]?.name || firstCid) }} title="Double‑click to rename">
+                    <span className="section-title" onDoubleClick={()=> { setEditingId(firstCid); setEditingName(containers[firstCid]?.name || firstCid) }} title="Double-click to rename">
                       {containers[firstCid]?.name || firstCid}
                     </span>
                   )}
@@ -78,9 +95,16 @@ export default function App() {
                 </div>
                 <div style={{display:'flex', alignItems:'center', gap:8}}>
                   <label>Scale
-                    <input style={{ marginLeft: 6 }} type="range" min={50} max={200} defaultValue={100}
-                      onChange={(e) => document.documentElement.style.setProperty('--cell-px', String(Math.round((+e.currentTarget.value)/100*24)))}
-                      aria-label="Scale canvas" />
+                    <input
+                      style={{ marginLeft: 6 }}
+                      type="range"
+                      min={MIN_SCALE_PERCENT}
+                      max={MAX_SCALE_PERCENT}
+                      value={scalePercent}
+                      onChange={handleScaleChange}
+                      onInput={handleScaleChange}
+                      aria-label="Scale canvas"
+                    />
                   </label>
                   <button className="icon-btn" onClick={() => removeContainer(firstCid)} title="Remove container" style={{color:'#DC2626'}}>
                     <span className="material-symbols-rounded">close</span>
@@ -116,7 +140,7 @@ export default function App() {
                                  onKeyDown={(e)=> { if (e.key==='Enter') { (e.target as HTMLInputElement).blur() } else if (e.key==='Escape') { setEditingId(null) } }}
                           />
                         ) : (
-                          <span className="section-title" onDoubleClick={()=> { setEditingId(cid); setEditingName(containers[cid]?.name || cid) }} title="Double‑click to rename">
+                          <span className="section-title" onDoubleClick={()=> { setEditingId(cid); setEditingName(containers[cid]?.name || cid) }} title="Double-click to rename">
                             {containers[cid]?.name || cid}
                           </span>
                         )}
@@ -127,9 +151,16 @@ export default function App() {
                       </div>
                       <div style={{display:'flex', alignItems:'center', gap:8}}>
                         <label>Scale
-                          <input style={{ marginLeft: 6 }} type="range" min={50} max={200} defaultValue={100}
-                            onChange={(e) => document.documentElement.style.setProperty('--cell-px', String(Math.round((+e.currentTarget.value)/100*24)))}
-                            aria-label="Scale canvas" />
+                          <input
+                            style={{ marginLeft: 6 }}
+                            type="range"
+                            min={MIN_SCALE_PERCENT}
+                            max={MAX_SCALE_PERCENT}
+                            value={scalePercent}
+                            onChange={handleScaleChange}
+                            onInput={handleScaleChange}
+                            aria-label="Scale canvas"
+                          />
                         </label>
                         <button className="icon-btn" onClick={() => removeContainer(cid)} title="Remove container" style={{color:'#DC2626'}}>
                           <span className="material-symbols-rounded">close</span>
@@ -153,9 +184,10 @@ export default function App() {
           <div className="panel-header">
             <div className="section-title">Constraints</div>
             <div style={{display:'flex', gap:8}}>
-              <button className="icon-btn" onClick={() => setAddConstraintOpen(true)} disabled={!hasContainers}>
+              {/* THIS IS WHERE THE ADD CONSTAINTS BUTTON IS */}
+              {/* <button className="icon-btn" onClick={() => setAddConstraintOpen(true)} disabled={!hasContainers}>
                 <span className="material-symbols-rounded">add</span> Add constraint
-              </button>
+              </button> */}
               <button className="icon-btn" onClick={() => setShowAdvanced(s => !s)} aria-expanded={showAdvanced}>
                 <span className="material-symbols-rounded">{showAdvanced ? 'visibility' : 'visibility_off'}</span>
                 {showAdvanced ? 'Hide advanced' : 'Show advanced'}
@@ -165,17 +197,21 @@ export default function App() {
           <div style={{overflow:'auto', minHeight:0, flex:1}}>
             <ConstraintsPanel showAdvanced={showAdvanced} />
             <div style={{marginTop:16, display:'grid', gap:8}}>
-              <Link className="icon-btn" to="/styleguide"><span className="material-symbols-rounded">palette</span> Styleguide</Link>
+              {/* THIS IS WHERE THE STYLE GUIDE BUTTON IS */}
+              {/* <Link className="icon-btn" to="/styleguide"><span className="material-symbols-rounded">palette</span> Styleguide</Link> */}
               <Link className="icon-btn" to="/"><span className="material-symbols-rounded">logout</span> Log out</Link>
             </div>
           </div>
           <div className="inventory-footer" style={{display:'flex', justifyContent:'flex-end', marginTop:8}}>
+            {/* THIS IS WHERE THE ADD CONSTRAINS BUTTON IS */}
             <button className="btn btn-primary" onClick={() => setUnimplementedOpen(true)}><span className="material-symbols-rounded">add</span> Add constraints</button>
           </div>
         </aside>
       </main>
       <footer className="footer-bar" role="contentinfo">
-        <Meters />
+        <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', width:'100%'}}>
+          <Meters />
+        </div>
       </footer>
 
       {/* Floating Undo/Redo */}

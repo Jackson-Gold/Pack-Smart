@@ -2,7 +2,7 @@ import React from 'react'
 import { usePackStore } from '../state/store'
 
 type Props = { containerId: string }
-const CELL = () => Number(getComputedStyle(document.documentElement).getPropertyValue('--cell-px') || '24')
+const CELL = () => Number(getComputedStyle(document.documentElement).getPropertyValue('--cell-px') || '36')
 
 export default function SvgCanvas({ containerId }: Props) {
   const { containers, packed, order, inventory, addPacked, movePacked, removePacked } = usePackStore()

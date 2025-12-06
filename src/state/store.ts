@@ -78,11 +78,11 @@ type State = {
 }
 
 const initialInventory: InventoryItem[] = [
-  { id:'laptop-1', name:'Laptop', type:'laptop', color:'#4F46E5', w:3, h:2, weight:2.2, fragile:true, count:1 },
-  { id:'shirt-1', name:'Shirt', type:'shirt', color:'#0284C7', w:2, h:2, weight:0.3, count:3 },
-  { id:'book-1', name:'Book', type:'book', color:'#10B981', w:1, h:1, weight:0.5, count:4 },
-  { id:'hat-1', name:'Hat', type:'hat', color:'#F59E0B', w:2, h:1, weight:0.2, count:1 },
-  { id:'toiletry-1', name:'Toiletry Kit', type:'other', color:'#EF4444', w:2, h:1, weight:0.6, fragile:false, odd:true, count:1 },
+  { id:'laptop-1', name:'Laptop', type:'laptop', color:'#4F46E5', w:6, h:4, weight:4.2, fragile:true, count:1 },
+  { id:'shirt-1', name:'Shirt', type:'shirt', color:'#0284C7', w:4, h:4, weight:0.4, count:3 },
+  { id:'book-1', name:'Book', type:'book', color:'#10B981', w:2, h:2, weight:0.6, count:4 },
+  { id:'hat-1', name:'Hat', type:'hat', color:'#F59E0B', w:4, h:2, weight:0.5, count:1 },
+  { id:'toiletry-1', name:'Toiletry Kit', type:'other', color:'#EF4444', w:4, h:2, weight:1, fragile:false, odd:true, count:1 },
 ]
 
 function snapshot(s: State): Snapshot {

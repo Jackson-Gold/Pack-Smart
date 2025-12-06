@@ -20,7 +20,7 @@ export default function HelloPage() {
         {/* Header */}
         <header className="sp-hero">
           <div>
-            <div className="sp-title"><span className="sp-gradient">SmartPack</span> — Hello World</div>
+            <div className="sp-title"><span className="sp-gradient">PackSmart</span> — Hello World</div>
             <div className="sp-route">Route: <code className="sp-code">/hello</code></div>
           </div>
           <div className="sp-badges">

@@ -18,7 +18,7 @@ export default function Meters() {
         <small>{totalWeight.toFixed(1)} / 20 kg (all containers)</small>
       </div>
       <div>
-        <div style={{fontSize:12, marginBottom:6}}>Volume (grid cells used)</div>
+        <div style={{fontSize:12, marginBottom:6}}>Volume</div>
         <div className="meter" role="meter" aria-valuemin={0} aria-valuemax={maxCells} aria-valuenow={totalCells}>
           <span style={{ width: `${Math.min(100, totalCells/maxCells*100)}%` }} />
         </div>

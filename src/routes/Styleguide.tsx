@@ -189,7 +189,7 @@ export default function Styleguide() {
         {/* Header */}
         <header className="sp-hero">
           <div>
-            <div className="sp-title"><span className="sp-gradient">SmartPack</span> — Styleguide</div>
+            <div className="sp-title"><span className="sp-gradient">PackSmart</span> — Styleguide</div>
             <div className="sp-route">Route: <code className="sp-code">/styleguide</code></div>
           </div>
           <div className="sp-badges">

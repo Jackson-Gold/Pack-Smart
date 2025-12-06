@@ -21,13 +21,30 @@ const MATERIAL_ICONS = [
 function IconPicker({ value, onChange }: { value: string, onChange: (icon: string) => void }) {
   const [isOpen, setIsOpen] = React.useState(false)
   const [search, setSearch] = React.useState('')
-  const filteredIcons = React.useMemo(() => 
-    MATERIAL_ICONS.filter(icon => icon.toLowerCase().includes(search.toLowerCase())),
+  const containerRef = React.useRef<HTMLDivElement | null>(null)
+
+  const filteredIcons = React.useMemo(
+    () =>
+      MATERIAL_ICONS.filter(icon =>
+        icon.toLowerCase().includes(search.toLowerCase())
+      ),
     [search]
   )
 
+  React.useEffect(() => {
+    if (!isOpen) return
+    const handleClick = (event: MouseEvent) => {
+      if (!containerRef.current) return
+      if (!containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [isOpen])
+
   return (
-    <div style={{position:'relative'}}>
+    <div style={{position:'relative'}} ref={containerRef}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -51,84 +68,98 @@ function IconPicker({ value, onChange }: { value: string, onChange: (icon: strin
         </span>
       </button>
       {isOpen && (
-        <>
-          <div
-            style={{
-              position:'fixed',
-              inset:0,
-              zIndex:61
-            }}
+        <div
+          style={{
+            position:'absolute',
+            top:'100%',
+            left:0,
+            right:0,
+            marginTop:4,
+            background:'white',
+            borderRadius:12,
+            boxShadow:'var(--shadow-2)',
+            border:'1px solid #E5E7EB',
+            zIndex:62,
+            maxHeight:300,
+            display:'flex',
+            flexDirection:'column',
+            overflow:'hidden'
+          }}
+        >
+          <button
+            type="button"
             onClick={() => setIsOpen(false)}
-          />
-          <div
             style={{
               position:'absolute',
-              top:'100%',
-              left:0,
-              right:0,
-              marginTop:4,
-              background:'white',
-              borderRadius:12,
-              boxShadow:'var(--shadow-2)',
-              border:'1px solid #E5E7EB',
-              zIndex:62,
-              maxHeight:300,
+              top:8,
+              right:8,
+              width:20,
+              height:20,
+              border:'none',
+              borderRadius:'999px',
+              background:'#FEE2E2',
+              color:'#DC2626',
+              fontSize:12,
+              fontWeight:700,
+              cursor:'pointer',
               display:'flex',
-              flexDirection:'column'
+              alignItems:'center',
+              justifyContent:'center'
             }}
-            onClick={e=>e.stopPropagation()}
+            aria-label="Close icon picker"
           >
-            <div style={{padding:12, borderBottom:'1px solid #E5E7EB'}}>
-              <input
-                type="text"
-                placeholder="Search icons..."
-                value={search}
-                onChange={e=>setSearch(e.currentTarget.value)}
-                style={{
-                  width:'100%',
-                  padding:'8px 12px',
-                  border:'1px solid #D1D5DB',
-                  borderRadius:8,
-                  fontSize:14
-                }}
-                autoFocus
-              />
-            </div>
-            <div
+            ×
+          </button>
+          <div style={{padding:12, borderBottom:'1px solid #E5E7EB'}}>
+            <input
+              type="text"
+              placeholder="Search icons..."
+              value={search}
+              onChange={e=>setSearch(e.currentTarget.value)}
               style={{
-                overflowY:'auto',
-                padding:8,
-                display:'grid',
-                gridTemplateColumns:'repeat(auto-fill, minmax(48px, 1fr))',
-                gap:8,
-                maxHeight:240
+                width:'100%',
+                padding:'8px 12px',
+                border:'1px solid #D1D5DB',
+                borderRadius:8,
+                fontSize:14
               }}
-            >
-              {filteredIcons.map(icon => (
-                <button
-                  key={icon}
-                  type="button"
-                  onClick={() => { onChange(icon); setIsOpen(false); setSearch('') }}
-                  style={{
-                    aspectRatio:'1',
-                    display:'flex',
-                    alignItems:'center',
-                    justifyContent:'center',
-                    border:'2px solid',
-                    borderColor:value === icon ? 'var(--indigo-600)' : '#E5E7EB',
-                    borderRadius:8,
-                    background:value === icon ? '#EEF2FF' : 'white',
-                    cursor:'pointer',
-                    transition:'all 0.2s'
-                  }}
-                  title={icon}
-                >
-                  <span className="material-symbols-rounded" style={{fontSize:24}}>{icon}</span>
-                </button>
-              ))}
-            </div>
+              autoFocus
+            />
           </div>
-        </>
+          <div
+            style={{
+              overflowY:'auto',
+              padding:8,
+              display:'grid',
+              gridTemplateColumns:'repeat(auto-fill, minmax(48px, 1fr))',
+              gap:8,
+              maxHeight:240
+            }}
+          >
+            {filteredIcons.map(icon => (
+              <button
+                key={icon}
+                type="button"
+                onClick={() => { onChange(icon); setIsOpen(false); setSearch('') }}
+                style={{
+                  aspectRatio:'1',
+                  display:'flex',
+                  alignItems:'center',
+                  justifyContent:'center',
+                  border:'2px solid',
+                  borderColor:value === icon ? 'var(--indigo-600)' : '#E5E7EB',
+                  borderRadius:8,
+                  background:value === icon ? '#EEF2FF' : 'white',
+                  cursor:'pointer',
+                  transition:'all 0.2s'
+                }}
+                title={icon}
+              >
+                <span className="material-symbols-rounded" style={{fontSize:24}}>{icon}</span>
+              </button>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   )

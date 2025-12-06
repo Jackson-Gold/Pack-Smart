@@ -60,4 +60,10 @@
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--slate-200); background: #fff; color: var(--slate-900); }
   .btn-primary { background: var(--indigo-600); color: #fff; border-color: transparent; }
   .btn-ghost { background: #fff; }
+  .panel-accent .icon-btn {
+  background: var(--slate-50);
+  color: var(--slate-700);
+  border: 1px solid var(--slate-200);
+}
+
 }

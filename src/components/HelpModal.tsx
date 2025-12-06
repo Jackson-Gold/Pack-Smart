@@ -10,7 +10,7 @@ export default function HelpModal({ open, onClose }: { open: boolean, onClose: (
       <div style={{width:680, maxWidth:'90vw', background:'white', borderRadius:12, boxShadow:'var(--shadow-2)'}}
            onClick={e => e.stopPropagation()}>
         <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', padding:16, borderBottom:'1px solid #E5E7EB'}}>
-          <h2 style={{fontWeight:600}}>Welcome to SmartPack</h2>
+          <h2 style={{fontWeight:600}}>Welcome to PackSmart</h2>
           <button className="icon-btn" onClick={onClose}><span className="material-symbols-rounded">close</span> Close</button>
         </div>
         <div style={{padding:16, display:'grid', gap:12}}>
@@ -20,6 +20,8 @@ export default function HelpModal({ open, onClose }: { open: boolean, onClose: (
             <li><strong>Click the ×</strong> on any packed item to return it to Inventory.</li>
             <li><strong>Leave Room</strong> is a slider; the reserved margin comes from all sides.</li>
             <li><strong>Double‑click container name</strong> to rename it.</li>
+            <li><strong>Optimize</strong> button suggests a better arrangement based on your selected criteria.</li>
+            <li><strong>Grid Units</strong> All dimensions are in inches; each grid square is approximately 1 in² (cubic inches for volume).</li>
           </ol>
         </div>
       </div>

@@ -9,7 +9,7 @@ export default function Login() {
         <div style={{display:'grid', gap:16, placeItems:'center'}}>
           <div className="brand" style={{fontSize:24}}>
             <span className="logo"><span className="material-symbols-rounded">backpack</span></span>
-            SmartPack
+            PackSmart
           </div>
           <figure className="frame" style={{width:540, maxWidth:'80%'}}>
             <img src={`${import.meta.env.BASE_URL}assets/SmartPackLogin 1.svg`} alt="SmartPack login hero" />

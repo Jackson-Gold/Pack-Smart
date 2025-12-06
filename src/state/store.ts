@@ -44,6 +44,17 @@ type Snapshot = {
   order: string[]
 }
 
+// Preset types so app & store can share the same shape
+export type PackingPresetItem = Omit<InventoryItem, 'id'> & { id?: string }
+
+export type PackingPreset = {
+  id: string
+  name: string
+  icon: string
+  summary: string
+  items: PackingPresetItem[]
+}
+
 type State = {
   inventory: Record<string, InventoryItem>
   containers: Record<string, Container>
@@ -75,6 +86,17 @@ type State = {
 
   addCustomConstraint: (containerId: string, label: string) => void
   toggleCustomConstraint: (containerId: string, id: string) => void
+
+  loadPresetInventory: (preset: PackingPreset) => void
+
+  // NEW: add container with user-specified dimensions
+  addContainerWithConfig: (config: {
+    name?: string
+    cols: number
+    rows: number
+    weightCap: number
+    reservePct: number // 0–1 fraction
+  }) => string
 }
 
 const initialInventory: InventoryItem[] = [
@@ -182,14 +204,94 @@ export const usePackStore = create<State>()(persist((set, get) => ({
     })
   },
 
+  loadPresetInventory: (preset) => {
+    get().record()
+    set(() => {
+      const inventory: Record<string, InventoryItem> = {}
+
+      preset.items.forEach((item, index) => {
+        const id =
+          item.id ??
+          `preset-${preset.id}-${index}-${Math.random().toString(36).slice(2,7)}`
+        inventory[id] = {
+          id,
+          name: item.name,
+          type: item.type,
+          color: item.color,
+          w: item.w,
+          h: item.h,
+          weight: item.weight,
+          fragile: item.fragile,
+          odd: item.odd,
+          count: item.count,
+        }
+      })
+
+      // Clear packed items & order; keep containers as-is
+      return {
+        inventory,
+        packed: {},
+        order: [],
+      }
+    })
+  },
+
+  // NEW: add container with user-specified dimensions
+  addContainerWithConfig: (config) => {
+    const baseState = get()
+    const id = 'main-' + (baseState.containerOrder.length + 1)
+    get().record()
+    set(state => {
+      const name =
+        config.name?.trim() || `Container ${state.containerOrder.length + 1}`
+      const cols = Number.isFinite(config.cols) && config.cols > 0 ? config.cols : 16
+      const rows = Number.isFinite(config.rows) && config.rows > 0 ? config.rows : 12
+      const weightCap =
+        Number.isFinite(config.weightCap) && config.weightCap > 0
+          ? config.weightCap
+          : 10
+      const reservePct =
+        typeof config.reservePct === 'number' && config.reservePct >= 0
+          ? config.reservePct
+          : 0.05
+
+      return {
+        containers: {
+          ...state.containers,
+          [id]: {
+            id,
+            name,
+            cols,
+            rows,
+            weightCap,
+            reservePct,
+            optimizeBy: 'space',
+            customConstraints: [],
+          },
+        },
+        containerOrder: [...state.containerOrder, id],
+      }
+    })
+    return id
+  },
+
   optimize: async (by) => {
     const worker = new Worker(new URL('../workers/optimizer.worker.ts', import.meta.url), { type: 'module' })
     const state = get()
     const payload = { by, items: state.inventory, packed: state.packed, containers: state.containers, order: state.containerOrder }
     worker.postMessage({ type:'optimize', payload })
     worker.onmessage = (e) => {
-      const { type, placements } = e.data || {}
-      if (type === 'result') set(() => ({ packed: placements, order: Object.keys(placements) }))
+      const { type, placements, unplacedCount, totalItems } = e.data || {}
+      if (type === 'result') {
+        set(() => ({ packed: placements, order: Object.keys(placements) }))
+        if (typeof unplacedCount === 'number' && typeof totalItems === 'number' && unplacedCount > 0) {
+          alert(
+            `Some items could not be packed given the current bag sizes and limits.\n\n` +
+            `We’ve still packed as much as possible (${totalItems - unplacedCount} of ${totalItems} items).\n` +
+            `Try adding another container, removing items, or reducing contraints.`
+          )
+        }
+      }
       worker.terminate()
     }
   },

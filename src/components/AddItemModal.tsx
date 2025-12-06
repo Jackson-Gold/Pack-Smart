@@ -183,8 +183,8 @@ export default function AddItemModal({ open, onClose }: { open: boolean, onClose
           <label className="input"><span>Icon</span>
             <IconPicker value={form.type} onChange={icon => set('type', icon)} />
           </label>
-          <label className="input"><span>Width (cells)</span><input type="number" min={1} max={8} value={form.w} onChange={e=>set('w', +e.currentTarget.value)} /></label>
-          <label className="input"><span>Height (cells)</span><input type="number" min={1} max={8} value={form.h} onChange={e=>set('h', +e.currentTarget.value)} /></label>
+          <label className="input"><span>Width (in)</span><input type="number" min={1} max={8} value={form.w} onChange={e=>set('w', +e.currentTarget.value)} /></label>
+          <label className="input"><span>Height (in)</span><input type="number" min={1} max={8} value={form.h} onChange={e=>set('h', +e.currentTarget.value)} /></label>
           <label className="input"><span>Weight (kg)</span><input type="number" min={0} step="0.1" value={form.weight} onChange={e=>set('weight', +e.currentTarget.value)} /></label>
           <label className="input"><span>Count</span><input type="number" min={1} max={20} value={form.count} onChange={e=>set('count', +e.currentTarget.value)} /></label>
           <label className="input" style={{gridColumn:'1 / -1'}}><span>Color</span><input type="color" value={form.color} onChange={e=>set('color', e.currentTarget.value)} /></label>

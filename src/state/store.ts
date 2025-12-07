@@ -6,7 +6,7 @@ export type ItemType = 'laptop'|'shirt'|'book'|'hat'|'other'|string
 export type InventoryItem = {
   id: string
   name: string
-  type: ItemType  // Can be old type enum or Material Design icon name
+  type: ItemType
   color: string
   w: number
   h: number
@@ -44,7 +44,6 @@ type Snapshot = {
   order: string[]
 }
 
-// Preset types so app & store can share the same shape
 export type PackingPresetItem = Omit<InventoryItem, 'id'> & { id?: string }
 
 export type PackingPreset = {
@@ -89,13 +88,12 @@ type State = {
 
   loadPresetInventory: (preset: PackingPreset) => void
 
-  // NEW: add container with user-specified dimensions
   addContainerWithConfig: (config: {
     name?: string
     cols: number
     rows: number
     weightCap: number
-    reservePct: number // 0–1 fraction
+    reservePct: number
   }) => string
 }
 
@@ -126,7 +124,18 @@ function applySnapshot(target: State, snap: Snapshot) {
 
 export const usePackStore = create<State>()(persist((set, get) => ({
   inventory: Object.fromEntries(initialInventory.map(i => [i.id, i])),
-  containers: { 'main-1': { id:'main-1', name:'Container 1', cols:16, rows:12, weightCap:10, reservePct:0.05, optimizeBy:'space', customConstraints:[] } },
+  containers: {
+    'main-1': {
+      id:'main-1',
+      name:'Packing Space 1',
+      cols:16,
+      rows:12,
+      weightCap:10,
+      reservePct:0.05,
+      optimizeBy:'space',
+      customConstraints:[]
+    }
+  },
   containerOrder: ['main-1'],
   packed: {},
   order: [],
@@ -150,15 +159,32 @@ export const usePackStore = create<State>()(persist((set, get) => ({
   removePacked: (id) => { get().record(); set(state => { const { [id]: removed, ...rest } = state.packed; return { packed: rest, order: state.order.filter(o => o !== id) } }) },
 
   setReserve: (containerId, pct) => { get().record(); set(state => ({ containers: { ...state.containers, [containerId]: { ...state.containers[containerId], reservePct: pct } } })) },
+
   addContainer: () => {
     const id = 'main-' + (get().containerOrder.length + 1)
     get().record()
-    set(state => ({
-      containers: { ...state.containers, [id]: { id, name:`Container ${state.containerOrder.length+1}`, cols:16, rows:12, weightCap:10, reservePct:0.05, optimizeBy:'space', customConstraints:[] } },
-      containerOrder: [...state.containerOrder, id]
-    }))
+    set(state => {
+      const index = state.containerOrder.length + 1
+      return {
+        containers: {
+          ...state.containers,
+          [id]: {
+            id,
+            name:`Packing Space ${index}`,
+            cols:16,
+            rows:12,
+            weightCap:10,
+            reservePct:0.05,
+            optimizeBy:'space',
+            customConstraints:[]
+          }
+        },
+        containerOrder: [...state.containerOrder, id]
+      }
+    })
     return id
   },
+
   removeContainer: (containerId) => {
     get().record()
     set(state => {
@@ -168,7 +194,11 @@ export const usePackStore = create<State>()(persist((set, get) => ({
       return { containers: rest, containerOrder: state.containerOrder.filter(id => id !== containerId), packed, order }
     })
   },
-  renameContainer: (containerId, name) => { get().record(); set(state => ({ containers: { ...state.containers, [containerId]: { ...state.containers[containerId], name } } })) },
+
+  renameContainer: (containerId, name) => {
+    get().record()
+    set(state => ({ containers: { ...state.containers, [containerId]: { ...state.containers[containerId], name } } }))
+  },
 
   addInventoryItem: (item) => {
     const id = item.id ?? ('item-' + Math.random().toString(36).slice(2,9))
@@ -176,7 +206,10 @@ export const usePackStore = create<State>()(persist((set, get) => ({
     set(state => ({ inventory: { ...state.inventory, [id]: { id, ...item } as any } }))
     return id
   },
-  updateInventoryItem: (id, patch) => { get().record(); set(state => ({ inventory: { ...state.inventory, [id]: { ...state.inventory[id], ...patch } } })) },
+  updateInventoryItem: (id, patch) => {
+    get().record()
+    set(state => ({ inventory: { ...state.inventory, [id]: { ...state.inventory[id], ...patch } } }))
+  },
   removeInventoryItem: (id) => {
     get().record()
     set(state => {
@@ -193,14 +226,36 @@ export const usePackStore = create<State>()(persist((set, get) => ({
     get().record()
     set(state => {
       const c = state.containers[containerId]
-      return { containers: { ...state.containers, [containerId]: { ...c, customConstraints: [...c.customConstraints, { id:'cc-'+Math.random().toString(36).slice(2,9), label, enabled:true }] } } }
+      return {
+        containers: {
+          ...state.containers,
+          [containerId]: {
+            ...c,
+            customConstraints: [
+              ...c.customConstraints,
+              { id:'cc-'+Math.random().toString(36).slice(2,9), label, enabled:true }
+            ]
+          }
+        }
+      }
     })
   },
+
   toggleCustomConstraint: (containerId, id) => {
     get().record()
     set(state => {
       const c = state.containers[containerId]
-      return { containers: { ...state.containers, [containerId]: { ...c, customConstraints: c.customConstraints.map(x => x.id===id ? { ...x, enabled: !x.enabled } : x) } } }
+      return {
+        containers: {
+          ...state.containers,
+          [containerId]: {
+            ...c,
+            customConstraints: c.customConstraints.map(x =>
+              x.id===id ? { ...x, enabled: !x.enabled } : x
+            )
+          }
+        }
+      }
     })
   },
 
@@ -227,7 +282,6 @@ export const usePackStore = create<State>()(persist((set, get) => ({
         }
       })
 
-      // Clear packed items & order; keep containers as-is
       return {
         inventory,
         packed: {},
@@ -236,14 +290,14 @@ export const usePackStore = create<State>()(persist((set, get) => ({
     })
   },
 
-  // NEW: add container with user-specified dimensions
   addContainerWithConfig: (config) => {
     const baseState = get()
     const id = 'main-' + (baseState.containerOrder.length + 1)
     get().record()
     set(state => {
+      const index = state.containerOrder.length + 1
       const name =
-        config.name?.trim() || `Container ${state.containerOrder.length + 1}`
+        config.name?.trim() || `Packing Space ${index}`
       const cols = Number.isFinite(config.cols) && config.cols > 0 ? config.cols : 16
       const rows = Number.isFinite(config.rows) && config.rows > 0 ? config.rows : 12
       const weightCap =
@@ -286,9 +340,9 @@ export const usePackStore = create<State>()(persist((set, get) => ({
         set(() => ({ packed: placements, order: Object.keys(placements) }))
         if (typeof unplacedCount === 'number' && typeof totalItems === 'number' && unplacedCount > 0) {
           alert(
-            `Some items could not be packed given the current bag sizes and limits.\n\n` +
+            `Some items could not be packed given the current packing spaces and limits.\n\n` +
             `We’ve still packed as much as possible (${totalItems - unplacedCount} of ${totalItems} items).\n` +
-            `Try adding another container, removing items, or reducing contraints.`
+            `Try adding another packing space or removing items.`
           )
         }
       }
@@ -304,11 +358,23 @@ export const usePackStore = create<State>()(persist((set, get) => ({
     if (!s.containerOrder || !Array.isArray(s.containerOrder)) s.containerOrder = Object.keys(s.containers || {})
     if (s.containers && s.containerOrder) s.containerOrder = s.containerOrder.filter((id: string) => !!s.containers[id])
     if (!s.containers || Object.keys(s.containers).length === 0) {
-      s.containers = { 'main-1': { id:'main-1', name:'Container 1', cols:16, rows:12, weightCap:10, reservePct:0.05, optimizeBy:'space', customConstraints:[] } }
+      s.containers = {
+        'main-1': {
+          id:'main-1',
+          name:'Packing Space 1',
+          cols:16,
+          rows:12,
+          weightCap:10,
+          reservePct:0.05,
+          optimizeBy:'space',
+          customConstraints:[]
+        }
+      }
       s.containerOrder = ['main-1']
     }
     if (s.containers) {
-      for (const k of Object.keys(s.containers)) {
+      const ids = Object.keys(s.containers)
+      for (const k of ids) {
         const c = s.containers[k] || {}
         if (typeof c.cols !== 'number') c.cols = 16
         if (typeof c.rows !== 'number') c.rows = 12
@@ -316,7 +382,10 @@ export const usePackStore = create<State>()(persist((set, get) => ({
         if (typeof c.reservePct !== 'number') c.reservePct = 0
         if (!Array.isArray(c.customConstraints)) c.customConstraints = []
         if (!c.id) c.id = k
-        if (!c.name) c.name = `Container ${Object.keys(s.containers).indexOf(k)+1}`
+        if (!c.name) {
+          const idx = ids.indexOf(k)
+          c.name = `Packing Space ${idx + 1}`
+        }
         s.containers[k] = c
       }
     }

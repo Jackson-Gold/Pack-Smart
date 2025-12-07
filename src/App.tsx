@@ -99,7 +99,10 @@ const PACK_PRESETS: PackingPreset[] = [
 
 export default function App() {
   const [showAdvanced, setShowAdvanced] = React.useState(false)
-  const [helpOpen, setHelpOpen] = React.useState(false)
+
+  // 3) Help opens by default when user lands on this page
+  const [helpOpen, setHelpOpen] = React.useState(true)
+
   const [addOpen, setAddOpen] = React.useState(false)
   const [addConstraintOpen, setAddConstraintOpen] = React.useState(false)
   const [editingId, setEditingId] = React.useState<string | null>(null)
@@ -115,7 +118,6 @@ export default function App() {
     redo,
     renameContainer,
     loadPresetInventory,
-    // NEW: add container with config
     addContainerWithConfig,
   } = usePackStore()
 
@@ -124,7 +126,7 @@ export default function App() {
   const [scalePercent, setScalePercent] = React.useState(DEFAULT_SCALE_PERCENT)
   const [packForMeOpen, setPackForMeOpen] = React.useState(false)
 
-  // NEW: Add Container overlay state
+  // Add Packing Space overlay state
   const [newContainerOpen, setNewContainerOpen] = React.useState(false)
   const [newContainerForm, setNewContainerForm] = React.useState({
     name: '',
@@ -134,7 +136,7 @@ export default function App() {
     reservePct: 5, // percent (0–50)
   })
 
-  // NEW: Optimize menu state
+  // Optimize menu state (header)
   const [optMenuOpen, setOptMenuOpen] = React.useState(false)
   const optMenuRef = React.useRef<HTMLDivElement | null>(null)
 
@@ -200,7 +202,7 @@ export default function App() {
     setPackForMeOpen(false)
   }
 
-  // NEW: create container from overlay
+  // Create container from overlay
   const handleCreateContainer = () => {
     const cols = Math.max(1, Number(newContainerForm.cols) || 1)
     const rows = Math.max(1, Number(newContainerForm.rows) || 1)
@@ -230,7 +232,7 @@ export default function App() {
     document.documentElement.style.setProperty('--cell-px', String(px))
   }, [scalePercent])
 
-  // NEW: close optimize menu when clicking outside
+  // Close optimize menu when clicking outside
   useEffect(() => {
     if (!optMenuOpen) return
     const handler = (event: MouseEvent) => {
@@ -255,7 +257,7 @@ export default function App() {
           PackSmart
         </div>
         <div className="toolbar">
-          {/* NEW: Optimize dropdown */}
+          {/* Optimize dropdown (header) */}
           <div
             ref={optMenuRef}
             style={{ position: 'relative', display: 'inline-block' }}
@@ -266,7 +268,7 @@ export default function App() {
               title="Optimize packing"
             >
               <span className="material-symbols-rounded">auto_awesome</span>
-              Optimize
+              Pack For Me
               <span
                 className="material-symbols-rounded"
                 aria-hidden
@@ -341,8 +343,6 @@ export default function App() {
               </div>
             )}
           </div>
-
-          {/* Removed separate "What-If" button */}
 
           <button
             className="icon-btn"
@@ -479,9 +479,9 @@ export default function App() {
             })}
           </div>
           <div className="inventory-footer" style={{display:'flex', justifyContent:'flex-end', marginTop:8, flexShrink:0}}>
-            {/* NEW: open Add Container overlay instead of adding directly */}
+            {/* Open Add Packing Space overlay */}
             <button className="btn btn-primary" onClick={() => setNewContainerOpen(true)}>
-              <span className="material-symbols-rounded">add</span> Add container
+              <span className="material-symbols-rounded">add</span> Add Packing Space
             </button>
           </div>
         </section>
@@ -490,10 +490,6 @@ export default function App() {
           <div className="panel-header">
             <div className="section-title">Constraints</div>
             <div style={{display:'flex', gap:8}}>
-              {/* THIS IS WHERE THE ADD CONSTAINTS BUTTON WAS */}
-              {/* <button className="icon-btn" onClick={() => setAddConstraintOpen(true)} disabled={!hasContainers}>
-                <span className="material-symbols-rounded">add</span> Add constraint
-              </button> */}
               <button className="icon-btn" onClick={() => setShowAdvanced(s => !s)} aria-expanded={showAdvanced}>
                 <span className="material-symbols-rounded">{showAdvanced ? 'visibility' : 'visibility_off'}</span>
                 {showAdvanced ? 'Hide advanced' : 'Show advanced'}
@@ -503,15 +499,13 @@ export default function App() {
           <div style={{overflow:'auto', minHeight:0, flex:1}}>
             <ConstraintsPanel showAdvanced={showAdvanced} />
             <div style={{marginTop:16, display:'grid', gap:8}}>
-              {/* THIS IS WHERE THE STYLE GUIDE BUTTON IS */}
-              {/* <Link className="icon-btn" to="/styleguide"><span className="material-symbols-rounded">palette</span> Styleguide</Link> */}
               <Link className="icon-btn" to="/"><span className="material-symbols-rounded">logout</span> Log out</Link>
             </div>
           </div>
           <div className="inventory-footer" style={{display:'flex', justifyContent:'flex-end', marginTop:8}}>
-            {/* "Pack For Me" preset picker */}
+            {/* Packing lists preset picker */}
             <button className="btn btn-primary" onClick={() => setPackForMeOpen(true)}>
-              <span className="material-symbols-rounded">auto_fix_high</span> Pack For Me
+              <span className="material-symbols-rounded">auto_fix_high</span> Packing Lists
             </button>
           </div>
         </aside>
@@ -638,7 +632,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Pack For Me modal */}
+      {/* Pack For Me modal (packing lists) */}
       {packForMeOpen && (
         <div
           role="dialog"
@@ -743,7 +737,7 @@ export default function App() {
         </div>
       )}
 
-      {/* NEW: Add Container modal */}
+      {/* Add Packing Space modal */}
       {newContainerOpen && (
         <div
           role="dialog"
@@ -778,7 +772,7 @@ export default function App() {
                 marginBottom: 8,
               }}
             >
-              <h2 style={{ fontWeight: 600 }}>Add container</h2>
+              <h2 style={{ fontWeight: 600 }}>Add Packing Space</h2>
               <button className="icon-btn" onClick={() => setNewContainerOpen(false)}>
                 <span className="material-symbols-rounded">close</span>
               </button>
@@ -873,7 +867,7 @@ export default function App() {
                 Cancel
               </button>
               <button className="btn btn-primary" onClick={handleCreateContainer}>
-                <span className="material-symbols-rounded">add</span> Add container
+                <span className="material-symbols-rounded">add</span> Add Packing Space
               </button>
             </div>
           </div>

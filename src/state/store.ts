@@ -342,7 +342,9 @@ export const usePackStore = create<State>()(persist((set, get) => ({
           alert(
             `Some items could not be packed given the current packing spaces and limits.\n\n` +
             `We’ve still packed as much as possible (${totalItems - unplacedCount} of ${totalItems} items).\n` +
-            `Try adding another packing space or removing items.`
+            `Try adding another packing space or removing items.\n\n` +
+            `You have ${Object.values(state.inventory).filter(i => i.fragile).length} fragile items and ${Object.values(state.inventory).filter(i => i.odd).length} odd items in your inventory. \n` +
+            `Consider adding more packing spaces or adjusting constraints to accommodate them.`
           )
         }
       }

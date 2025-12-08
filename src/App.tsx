@@ -42,13 +42,13 @@ const PACK_PRESETS: PackingPreset[] = [
     icon: 'beach_access',
     summary: 'Swimwear, light clothing, sun protection, and a beach bag.',
     items: [
-      { name: 'Beach Tote', type: 'shopping_bag', w: 2, h: 2, weight: 0.8, count: 1, color: '#FBBF24', fragile: false, odd: false },
-      { name: 'Swimsuit', type: 'beach_access', w: 1, h: 1, weight: 0.2, count: 2, color: '#38BDF8', fragile: false, odd: false },
-      { name: 'Flip Flops', type: 'deck', w: 2, h: 1, weight: 0.4, count: 1, color: '#0EA5E9', fragile: false, odd: false },
-      { name: 'Towels', type: 'dry_cleaning', w: 2, h: 2, weight: 1.2, count: 2, color: '#F97316', fragile: false, odd: false },
-      { name: 'Sunscreen', type: 'medication', w: 1, h: 1, weight: 0.3, count: 1, color: '#FACC15', fragile: false, odd: false },
-      { name: 'Sunglasses', type: 'eyeglasses', w: 1, h: 1, weight: 0.1, count: 1, color: '#0F172A', fragile: true, odd: false },
-      { name: 'Light Outfits', type: 'checkroom', w: 2, h: 2, weight: 1.6, count: 3, color: '#60A5FA', fragile: false, odd: false }
+      { name: 'Beach Tote',     type: 'shopping_bag', w: 4, h: 4, weight: 0.8, count: 1, color: '#FBBF24', fragile: false, odd: false },
+      { name: 'Swimsuit',       type: 'beach_access',  w: 2, h: 2, weight: 0.2, count: 2, color: '#38BDF8', fragile: false, odd: false },
+      { name: 'Flip Flops',     type: 'deck',          w: 4, h: 2, weight: 0.4, count: 1, color: '#0EA5E9', fragile: false, odd: false },
+      { name: 'Towels',         type: 'dry_cleaning',  w: 4, h: 4, weight: 1.2, count: 2, color: '#F97316', fragile: false, odd: false },
+      { name: 'Sunscreen',      type: 'medication',    w: 2, h: 2, weight: 0.3, count: 1, color: '#FACC15', fragile: false, odd: false },
+      { name: 'Sunglasses',     type: 'eyeglasses',    w: 2, h: 2, weight: 0.1, count: 1, color: '#0F172A', fragile: false,  odd: false },
+      { name: 'Light Outfits',  type: 'checkroom',     w: 4, h: 4, weight: 1.6, count: 3, color: '#60A5FA', fragile: false, odd: false }
     ]
   },
   {
@@ -57,13 +57,13 @@ const PACK_PRESETS: PackingPreset[] = [
     icon: 'downhill_skiing',
     summary: 'Heavy layers, ski gear, helmet, and gloves for cold weather.',
     items: [
-      { name: 'Ski Jacket', type: 'checkroom', w: 2, h: 2, weight: 1.5, count: 1, color: '#1D4ED8', fragile: false, odd: false },
-      { name: 'Snow Pants', type: 'styler', w: 2, h: 2, weight: 1.2, count: 1, color: '#1E293B', fragile: false, odd: false },
-      { name: 'Base Layers', type: 'checkroom', w: 2, h: 1, weight: 0.7, count: 2, color: '#22C55E', fragile: false, odd: false },
-      { name: 'Gloves & Hat', type: 'redeem', w: 1, h: 1, weight: 0.3, count: 1, color: '#F97316', fragile: false, odd: false },
-      { name: 'Goggles', type: 'eyeglasses', w: 1, h: 1, weight: 0.2, count: 1, color: '#0F172A', fragile: true, odd: false },
-      { name: 'Helmet', type: 'sports_motorsports', w: 2, h: 2, weight: 0.9, count: 1, color: '#EF4444', fragile: true, odd: true },
-      { name: 'Apres Shoes', type: 'hiking', w: 2, h: 1, weight: 0.9, count: 1, color: '#92400E', fragile: false, odd: false }
+      { name: 'Ski Jacket',     type: 'checkroom',         w: 4, h: 4, weight: 1.5, count: 1, color: '#1D4ED8', fragile: false, odd: false },
+      { name: 'Snow Pants',     type: 'styler',            w: 4, h: 4, weight: 1.2, count: 1, color: '#1E293B', fragile: false, odd: false },
+      { name: 'Base Layers',    type: 'checkroom',         w: 4, h: 2, weight: 0.7, count: 2, color: '#22C55E', fragile: false, odd: false },
+      { name: 'Gloves & Hat',   type: 'redeem',            w: 2, h: 2, weight: 0.3, count: 1, color: '#F97316', fragile: false, odd: false },
+      { name: 'Goggles',        type: 'eyeglasses',        w: 2, h: 2, weight: 0.2, count: 1, color: '#0F172A', fragile: true,  odd: false },
+      { name: 'Helmet',         type: 'sports_motorsports',w: 4, h: 4, weight: 0.9, count: 1, color: '#EF4444', fragile: false,  odd: true  },
+      { name: 'Apres Shoes',    type: 'hiking',            w: 4, h: 2, weight: 0.9, count: 1, color: '#92400E', fragile: false, odd: false }
     ]
   },
   {
@@ -72,13 +72,13 @@ const PACK_PRESETS: PackingPreset[] = [
     icon: 'work',
     summary: 'Laptop, work outfits, toiletries, and travel documents.',
     items: [
-      { name: 'Laptop', type: 'laptop', w: 2, h: 1, weight: 1.3, count: 1, color: '#0EA5E9', fragile: true, odd: false },
-      { name: 'Charger & Cables', type: 'power', w: 1, h: 1, weight: 0.3, count: 1, color: '#6B7280', fragile: false, odd: true },
-      { name: 'Work Outfits', type: 'checkroom', w: 2, h: 2, weight: 2.0, count: 3, color: '#6366F1', fragile: false, odd: false },
-      { name: 'Shoes (Dress)', type: 'hiking', w: 2, h: 1, weight: 0.8, count: 1, color: '#4B5563', fragile: false, odd: false },
-      { name: 'Toiletry Kit', type: 'backpack', w: 2, h: 1, weight: 0.5, count: 1, color: '#F97316', fragile: false, odd: false },
-      { name: 'Notebook & Pen', type: 'menu_book', w: 1, h: 1, weight: 0.2, count: 1, color: '#FACC15', fragile: false, odd: false },
-      { name: 'Travel Docs', type: 'badge', w: 1, h: 1, weight: 0.1, count: 1, color: '#22C55E', fragile: true, odd: false }
+      { name: 'Laptop',         type: 'laptop',    w: 4, h: 2, weight: 1.3, count: 1, color: '#0EA5E9', fragile: false,  odd: false },
+      { name: 'Charger & Cables', type: 'power',   w: 2, h: 2, weight: 0.3, count: 1, color: '#6B7280', fragile: false, odd: false  },
+      { name: 'Work Outfits',   type: 'checkroom', w: 4, h: 4, weight: 2.0, count: 3, color: '#6366F1', fragile: false, odd: false },
+      { name: 'Shoes (Dress)',  type: 'hiking',    w: 4, h: 2, weight: 0.8, count: 1, color: '#4B5563', fragile: false, odd: false },
+      { name: 'Toiletry Kit',   type: 'backpack',  w: 4, h: 2, weight: 0.5, count: 1, color: '#F97316', fragile: false, odd: false },
+      { name: 'Notebook & Pen', type: 'menu_book', w: 2, h: 2, weight: 0.2, count: 1, color: '#FACC15', fragile: false, odd: false },
+      { name: 'Travel Docs',    type: 'badge',     w: 2, h: 2, weight: 0.1, count: 1, color: '#22C55E', fragile: false,  odd: false }
     ]
   },
   {
@@ -87,20 +87,21 @@ const PACK_PRESETS: PackingPreset[] = [
     icon: 'location_city',
     summary: 'Casual outfits, light jacket, daypack, and small essentials.',
     items: [
-      { name: 'Daypack', type: 'backpack', w: 2, h: 2, weight: 0.7, count: 1, color: '#22C55E', fragile: false, odd: false },
-      { name: 'Casual Outfits', type: 'checkroom', w: 2, h: 2, weight: 1.5, count: 3, color: '#3B82F6', fragile: false, odd: false },
-      { name: 'Light Jacket', type: 'checkroom', w: 2, h: 1, weight: 0.6, count: 1, color: '#0EA5E9', fragile: false, odd: false },
-      { name: 'Walking Shoes', type: 'hiking', w: 2, h: 1, weight: 0.9, count: 1, color: '#F97316', fragile: false, odd: false },
-      { name: 'Headphones', type: 'headphones', w: 1, h: 1, weight: 0.2, count: 1, color: '#6B7280', fragile: true, odd: false },
-      { name: 'Small Umbrella', type: 'umbrella', w: 1, h: 1, weight: 0.3, count: 1, color: '#0F172A', fragile: false, odd: true }
+      { name: 'Daypack',        type: 'backpack',  w: 4, h: 4, weight: 0.7, count: 1, color: '#22C55E', fragile: false, odd: false },
+      { name: 'Casual Outfits', type: 'checkroom', w: 4, h: 4, weight: 1.5, count: 3, color: '#3B82F6', fragile: false, odd: false },
+      { name: 'Light Jacket',   type: 'checkroom', w: 4, h: 2, weight: 0.6, count: 1, color: '#0EA5E9', fragile: false, odd: false },
+      { name: 'Walking Shoes',  type: 'hiking',    w: 4, h: 2, weight: 0.9, count: 1, color: '#F97316', fragile: false, odd: false },
+      { name: 'Headphones',     type: 'headphones',w: 2, h: 2, weight: 0.2, count: 1, color: '#6B7280', fragile: true,  odd: false },
+      { name: 'Small Umbrella', type: 'umbrella',  w: 2, h: 2, weight: 0.3, count: 1, color: '#0F172A', fragile: false, odd: true  }
     ]
   }
 ]
 
+
 export default function App() {
   const [showAdvanced, setShowAdvanced] = React.useState(false)
 
-  // 3) Help opens by default when user lands on this page
+  // Help opens by default when user lands on this page
   const [helpOpen, setHelpOpen] = React.useState(true)
 
   const [addOpen, setAddOpen] = React.useState(false)
@@ -217,6 +218,7 @@ export default function App() {
       reservePct: reservePctPercent / 100,
     })
 
+    // reset + close
     setNewContainerOpen(false)
     setNewContainerForm({
       name: '',
@@ -359,7 +361,7 @@ export default function App() {
             aria-haspopup="dialog"
             aria-controls="help-modal"
           >
-            <span className="material-symbols-rounded">help</span> Help
+            <span className="material-symbols-rounded">help</span>FAQ
           </button>
         </div>
       </header>
@@ -790,9 +792,10 @@ export default function App() {
                 <input
                   type="text"
                   value={newContainerForm.name}
-                  onChange={e =>
-                    setNewContainerForm(f => ({ ...f, name: e.currentTarget.value }))
-                  }
+                  onChange={e => {
+                    const value = e.currentTarget.value
+                    setNewContainerForm(f => ({ ...f, name: value }))
+                  }}
                 />
               </label>
               <label className="input">
@@ -802,12 +805,13 @@ export default function App() {
                   min={1}
                   max={48}
                   value={newContainerForm.cols}
-                  onChange={e =>
+                  onChange={e => {
+                    const value = Number(e.currentTarget.value)
                     setNewContainerForm(f => ({
                       ...f,
-                      cols: Number(e.currentTarget.value),
+                      cols: value,
                     }))
-                  }
+                  }}
                 />
               </label>
               <label className="input">
@@ -817,12 +821,13 @@ export default function App() {
                   min={1}
                   max={48}
                   value={newContainerForm.rows}
-                  onChange={e =>
+                  onChange={e => {
+                    const value = Number(e.currentTarget.value)
                     setNewContainerForm(f => ({
                       ...f,
-                      rows: Number(e.currentTarget.value),
+                      rows: value,
                     }))
-                  }
+                  }}
                 />
               </label>
               <label className="input">
@@ -831,12 +836,13 @@ export default function App() {
                   type="number"
                   min={1}
                   value={newContainerForm.weightCap}
-                  onChange={e =>
+                  onChange={e => {
+                    const value = Number(e.currentTarget.value)
                     setNewContainerForm(f => ({
                       ...f,
-                      weightCap: Number(e.currentTarget.value),
+                      weightCap: value,
                     }))
-                  }
+                  }}
                 />
               </label>
               <label className="input">
@@ -846,12 +852,13 @@ export default function App() {
                   min={0}
                   max={50}
                   value={newContainerForm.reservePct}
-                  onChange={e =>
+                  onChange={e => {
+                    const value = Number(e.currentTarget.value)
                     setNewContainerForm(f => ({
                       ...f,
-                      reservePct: Number(e.currentTarget.value),
+                      reservePct: value,
                     }))
-                  }
+                  }}
                 />
               </label>
             </div>
